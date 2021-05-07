@@ -1,10 +1,13 @@
-# Web streaming example
+# Web streaming
 # Source code from the official PiCamera package
 # http://picamera.readthedocs.io/en/latest/recipes2.html#web-streaming
 
-#Modified by Stuartofmt
+global streamVersion
+streamVersion = '1.0.0'
 
-#Updated to use threadingHTTPServer and SimpleHTTPhandler
+# Modified by Stuartofmt
+# Released under The MIT License. Full text available via https://opensource.org/licenses/MIT
+# Updated to use threadingHTTPServer and SimpleHTTPhandler
 
 import argparser
 import io
@@ -13,6 +16,26 @@ import logging
 import socketserver
 from threading import Condition
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+
+def init():
+    # parse command line arguments
+    parser = argparse.ArgumentParser(
+            description='Helper Web Server for running DuetLapse3 remotely. V' + startDuetLapse3Version,
+            allow_abbrev=False)
+    # Environment
+    parser.add_argument('-host', type=str, nargs=1, default=['0.0.0.0'],
+                        help='The ip address this service listens on. Default = 0.0.0.0')
+    parser.add_argument('-port', type=int, nargs=1, default=[0],
+                        help='Specify the port on which the server listens. Default = 0')
+    parser.add_argument('-rotate', type=int, nargs=1, default=[0], help='Rotation. Default = 0')
+    args = vars(parser.parse_args())
+
+    global host, port, rotate
+
+    host = args['host'][0]
+    port = args['port'][0]
+    rotate = args['rotate']
 
 
 class StreamingOutput(object):
@@ -66,17 +89,22 @@ class StreamingHandler(SimpleHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
+"""
+Main Program
+"""
+if __name__ == "__main__":
 
-with picamera.PiCamera(resolution='1024x768', framerate=24) as camera:
-    output = StreamingOutput()
-    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    camera.rotation = 180
-    camera.start_recording(output, format='mjpeg')
-    try:
+    init()
 
-        host = ''
-        port = 8081
-        server = ThreadingHTTPServer((host, port), StreamingHandler)
-        server.serve_forever()
-    finally:
-        camera.stop_recording()
+    with picamera.PiCamera(resolution='1024x768', framerate=24) as camera:
+        output = StreamingOutput()
+        #Uncomment the next line to change your Pi's Camera rotation (in degrees)
+        camera.rotation = rotate
+        camera.start_recording(output, format='mjpeg')
+        try:
+            #host = host
+            #port = 8081
+            server = ThreadingHTTPServer((host, port), StreamingHandler)
+            server.serve_forever()
+        finally:
+            camera.stop_recording()
