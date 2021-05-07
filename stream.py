@@ -14,7 +14,7 @@ import logging
 from threading import Condition
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-# global streamVersion
+
 streamVersion = '1.0.0'
 
 
@@ -55,7 +55,6 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
-#class StreamingHandler(server.BaseHTTPRequestHandler):
 
 
 class StreamingHandler(SimpleHTTPRequestHandler):
@@ -63,7 +62,6 @@ class StreamingHandler(SimpleHTTPRequestHandler):
         print(self.path)
         if self.path == '/stream.mjpg':
             self.send_response(200)
-            # self.send_header('Age', 0)
             self.send_header('Age', '0')
             self.send_header('Cache-Control', 'no-cache, private')
             self.send_header('Pragma', 'no-cache')
@@ -77,7 +75,6 @@ class StreamingHandler(SimpleHTTPRequestHandler):
                     try:
                         self.wfile.write(b'--FRAME\r\n')
                         self.send_header('Content-Type', 'image/jpeg')
-                        # self.send_header('Content-Length', len(frame))
                         self.send_header('Content-Length', str(len(frame)))
                         self.end_headers()
                         self.wfile.write(frame)
@@ -106,12 +103,9 @@ if __name__ == "__main__":
 
     with picamera.PiCamera(resolution='1024x768', framerate=24) as camera:
         output = StreamingOutput()
-        #Uncomment the next line to change your Pi's Camera rotation (in degrees)
         camera.rotation = rotate
         camera.start_recording(output, format='mjpeg')
         try:
-            #host = host
-            #port = 8081
             server = ThreadingHTTPServer((host, port), StreamingHandler)
             server.serve_forever()
         finally:
