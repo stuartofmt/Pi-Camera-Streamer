@@ -2,9 +2,6 @@
 # Source code from the official PiCamera package
 # http://picamera.readthedocs.io/en/latest/recipes2.html#web-streaming
 
-global streamVersion
-streamVersion = '1.0.0'
-
 # Modified by Stuartofmt
 # Released under The MIT License. Full text available via https://opensource.org/licenses/MIT
 # Updated to use threadingHTTPServer and SimpleHTTPhandler
@@ -13,9 +10,12 @@ import argparse
 import io
 import picamera
 import logging
-import socketserver
+# import socketserver
 from threading import Condition
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+# global streamVersion
+streamVersion = '1.0.0'
 
 
 def init():
@@ -35,7 +35,7 @@ def init():
 
     host = args['host'][0]
     port = args['port'][0]
-    rotate = args['rotate']
+    rotate = args['rotate'][0]
 
 
 class StreamingOutput(object):
@@ -56,12 +56,15 @@ class StreamingOutput(object):
         return self.buffer.write(buf)
 
 #class StreamingHandler(server.BaseHTTPRequestHandler):
+
+
 class StreamingHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         print(self.path)
-        if (self.path == '/stream.mjpg'):
+        if self.path == '/stream.mjpg':
             self.send_response(200)
-            self.send_header('Age', 0)
+            # self.send_header('Age', 0)
+            self.send_header('Age', '0')
             self.send_header('Cache-Control', 'no-cache, private')
             self.send_header('Pragma', 'no-cache')
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
@@ -74,7 +77,8 @@ class StreamingHandler(SimpleHTTPRequestHandler):
                     try:
                         self.wfile.write(b'--FRAME\r\n')
                         self.send_header('Content-Type', 'image/jpeg')
-                        self.send_header('Content-Length', len(frame))
+                        # self.send_header('Content-Length', len(frame))
+                        self.send_header('Content-Length', str(len(frame)))
                         self.end_headers()
                         self.wfile.write(frame)
                         self.wfile.write(b'\r\n')
@@ -89,11 +93,15 @@ class StreamingHandler(SimpleHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
+
+
 """
 Main Program
 """
-if __name__ == "__main__":
 
+
+if __name__ == "__main__":
+    global host, port, rotate
     init()
 
     with picamera.PiCamera(resolution='1024x768', framerate=24) as camera:
