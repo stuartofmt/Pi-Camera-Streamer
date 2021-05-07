@@ -56,7 +56,6 @@ class StreamingOutput(object):
         return self.buffer.write(buf)
 
 
-
 class StreamingHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         print(self.path)
