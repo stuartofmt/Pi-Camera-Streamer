@@ -1,4 +1,4 @@
-# Pi-Camera-Stream
+# Pi-Camera-Streamer
 
 This is a simple video streamer for use with the Pi Camera
 
