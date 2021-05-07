@@ -28,7 +28,7 @@ def init():
                         help='The ip address this service listens on. Default = 0.0.0.0')
     parser.add_argument('-port', type=int, nargs=1, default=[0],
                         help='Specify the port on which the server listens. Default = 0')
-    parser.add_argument('-rotate', type=int, nargs=1, default=[0], help='Rotation. Default = 0')
+    parser.add_argument('-rotate', type=str, nargs=1, default=['0'], help='Rotation. Default = 0')
     args = vars(parser.parse_args())
 
     global host, port, rotate
