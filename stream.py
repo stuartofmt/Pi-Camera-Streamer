@@ -9,7 +9,7 @@ streamVersion = '1.0.0'
 # Released under The MIT License. Full text available via https://opensource.org/licenses/MIT
 # Updated to use threadingHTTPServer and SimpleHTTPhandler
 
-import argparser
+import argparse
 import io
 import picamera
 import logging
