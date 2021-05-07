@@ -21,7 +21,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 def init():
     # parse command line arguments
     parser = argparse.ArgumentParser(
-            description='Helper Web Server for running DuetLapse3 remotely. V' + startDuetLapse3Version,
+            description='Streaming http server for Pi camera. V' + streamVersion,
             allow_abbrev=False)
     # Environment
     parser.add_argument('-host', type=str, nargs=1, default=['0.0.0.0'],
