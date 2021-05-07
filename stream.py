@@ -2,6 +2,8 @@
 # Source code from the official PiCamera package
 # http://picamera.readthedocs.io/en/latest/recipes2.html#web-streaming
 
+#Modified by Stuartofmt
+
 #Updated to use threadingHTTPServer and SimpleHTTPhandler
 
 import argparser
