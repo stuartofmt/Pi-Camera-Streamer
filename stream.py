@@ -9,8 +9,6 @@
 import argparse
 import io
 import picamera
-import logging
-# import socketserver
 from threading import Condition
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
@@ -82,7 +80,7 @@ class StreamingHandler(SimpleHTTPRequestHandler):
                         print('Client Disconnected')
                         break
             except Exception as e:
-                logging.warning(
+                print(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
 
