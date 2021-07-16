@@ -1,3 +1,8 @@
+#  I am no longer maintaining / improving this code.  There is a more functional program that supports the Pi Camera aa well as generic usb camera's here:
+https://github.com/stuartofmt/videostream
+
+
+
 # Pi-Camera-Streamer
 
 This is a simple video streamer for use with the Pi Camera.  It streams video in mjpg format.
