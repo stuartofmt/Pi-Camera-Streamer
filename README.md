@@ -11,28 +11,52 @@ It was updated to use threadingHTTPServer and SimpleHTTPhandleror as well as all
 
 Its written using Python3
 
-**Installation:**
-Download to a directory of your choice.
+## Installation
 
-`wget https://github.com/stuartofmt/Pi-Camera-Streamer/raw/main/stream.py  -O stream.py`
+1. Install dependencies:
+    - `sudo apt-get update`
+    - `sudo apt-get install python-picamera python3-picamera`
+    
+2. Download the streaming script to a directory of your choice.
 
-then make it executable
+    `wget https://github.com/stuartofmt/Pi-Camera-Streamer/raw/main/stream.py  -O stream.py`
 
-`chmod 744 stream.py`
+3. Then make it executable
 
-**Startup:**
+    `chmod 744 stream.py`
 
-python3 stream.py -port [-host] [-rotate]
+## Running stream.py
 
-Specifying a port is mandatory.
+    python3 stream.py -port [-host] [-rotate]
 
-Usually -host **will not need to be specified** - it defaults machine you are running the code on.
+Arguments:
 
-If the video does not have the right orientation - this can be fixed with -rotate.  It defaults to 0 (zero).  Common settings wil be 0, 90, 180, 270
+- Specifying a `-port` is mandatory
+
+- Usually `-host` **will not need to be specified** - it defaults machine you are running the code on.
+
+- If the video does not have the right orientation - this can be fixed with `-rotate`.  It defaults to `0` (zero).  Common settings wil be `0`, `90`, `180`, `270`
 
 **Example:**
 
-Start stream.py and have it serve streaming video on port 8081 rotated 180 deg
+1. Start `stream.py` and have it serve streaming video on port `8082` rotated `180` deg
 
-`python3 ./stream.py -port 8082 -rotate 180`
+    `python3 ./stream.py -port 8082 -rotate 180`
+    
+2. Browse to: `http://<ip-of-your-pi>:8082/stream.mjpg`
+
+
+## Start stream.py during bootup
+- `sudo nano /etc/rc.local`
+- Above the line `exit 0`, add the following line:
+  
+    `/usr/bin/python3 /home/pi/stream.py -port 8082 -rotate 180`
+  
+    Assumptions made:
+    - `which python3` prints `/usr/bin/python3`
+    - You downloaded the stream.py script to the pi user home directory
+    - You can also set the port param and rotation here as required
+    - Adjust the paths accordingly should `python3` be installed somehwere else or you downloaded the script not your pi user home directory
+- Save the changes
+- `sudo reboot`
 
